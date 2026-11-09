@@ -14,6 +14,7 @@ export class SearchComponent implements OnInit {
   searchString: string = '';
   searchCategory: string = 'artist';
   searchCategories: string[] = ['artist', 'album', 'track'];
+
   resources: ResourceData[] = [];
   tracks: TrackData[] = [];
 
@@ -27,24 +28,28 @@ export class SearchComponent implements OnInit {
 
   search(): void {
     const query = this.searchString.trim();
+
     if (!query || this.loading) {
       return;
     }
 
-    // Keep the results tied to the category used for this request.
     const category = this.searchCategory;
+
     this.loading = true;
     this.errorMessage = '';
     this.resources = [];
     this.tracks = [];
+    this.resultCategory = '';
 
     this.spotifyService.searchFor(category, query)
       .then((results) => {
         this.resultCategory = category;
         this.resources = results;
+
         this.tracks = category === 'track'
           ? results as TrackData[]
           : [];
+
         this.loading = false;
       })
       .catch((error) => {

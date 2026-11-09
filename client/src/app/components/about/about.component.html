@@ -1,13 +1,23 @@
+<!-- Load user information -->
 <button class="btn btn-light" (click)="loadAboutMe()">
   Load info about me
 </button>
 
-<p *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+<!-- Display error message if loading fails -->
+<p *ngIf="errorMessage" role="alert">
+  {{ errorMessage }}
+</p>
 
+<!-- Display username -->
 <h3>Logged in user: {{ name }}</h3>
 
-<img [src]="profile_pic" class="profile" alt="User profile picture">
+<!-- Display profile picture -->
+<img
+  [src]="profile_pic"
+  class="profile"
+  alt="User profile picture">
 
+<!-- Open Spotify profile -->
 <p>
   <a
     *ngIf="profile_link"

@@ -17,7 +17,7 @@
     </thead>
 
     <tbody>
-      @for (track of tracks; track $index; let i = $index) {
+      @for (track of tracks; track track.id; let i = $index) {
         <tr>
           <td>{{ i + 1 }}</td>
 

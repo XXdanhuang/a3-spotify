@@ -6,8 +6,13 @@
   aria-label="Search keywords"
   placeholder="Enter a name">
 
-<select [(ngModel)]="searchCategory" aria-label="Search category">
-  <option *ngFor="let category of searchCategories" [value]="category">
+<select
+  [(ngModel)]="searchCategory"
+  aria-label="Search category">
+
+  <option
+    *ngFor="let category of searchCategories"
+    [value]="category">
     {{ category }}
   </option>
 </select>
@@ -19,7 +24,9 @@
   {{ loading ? 'Searching...' : 'Search' }}
 </button>
 
-<p *ngIf="errorMessage" role="alert">{{ errorMessage }}</p>
+<p *ngIf="errorMessage" role="alert">
+  {{ errorMessage }}
+</p>
 
 <app-carousel
   *ngIf="resources.length > 0 &&
