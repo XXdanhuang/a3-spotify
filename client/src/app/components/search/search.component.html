@@ -1,31 +1,41 @@
-
 <h1>Search Spotify</h1>
 
-<!-- Bind input to searchString -->
-<input [(ngModel)]="searchString">
+<input
+  [(ngModel)]="searchString"
+  (keyup.enter)="search()"
+  aria-label="Search keywords"
+  placeholder="Enter a name">
 
-<!-- Bind select to searchCategory -->
-<select [(ngModel)]="searchCategory">
-  <option *ngFor="let category of searchCategories"
-          [value]="category">
+<select
+  [(ngModel)]="searchCategory"
+  aria-label="Search category">
+
+  <option
+    *ngFor="let category of searchCategories"
+    [value]="category">
     {{ category }}
   </option>
 </select>
 
-<!-- Call search function -->
-<button class="btn btn-light" (click)="search()">
-  Search
+<button
+  class="btn btn-light"
+  (click)="search()"
+  [disabled]="loading || !searchString.trim()">
+  {{ loading ? 'Searching...' : 'Search' }}
 </button>
 
-<!-- Display artist and album results -->
+<p *ngIf="errorMessage" role="alert">
+  {{ errorMessage }}
+</p>
+
 <app-carousel
-  *ngIf="resources && (searchCategory === 'artist' || searchCategory === 'album')"
+  *ngIf="resources.length > 0 &&
+    (resultCategory === 'artist' || resultCategory === 'album')"
   [resources]="resources"
-  carouselId="searchCarousel">
+  carouselId="search-results">
 </app-carousel>
 
-<!-- Display track results -->
 <app-track-list
-  *ngIf="resources && searchCategory === 'track'"
-  [tracks]="resources">
+  *ngIf="tracks.length > 0 && resultCategory === 'track'"
+  [tracks]="tracks">
 </app-track-list>

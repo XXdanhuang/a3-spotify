@@ -1,8 +1,9 @@
+@if (resources && resources.length > 0) {
+  <div
+    [id]="carouselId"
+    class="carousel slide carousel-fade">
 
-@if (resources) {
-  <div [id]="carouselId" class="carousel slide carousel-fade">
     <div class="carousel-inner">
-
       @for (resource of resources; track resource.id; let first = $first) {
         <app-carousel-card
           class="carousel-item"
@@ -10,23 +11,31 @@
           [resource]="resource">
         </app-carousel-card>
       }
-
     </div>
 
-    <a
+    <button
       class="carousel-control-prev"
+      type="button"
       [attr.data-bs-target]="carouselIdForBinding"
       data-bs-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+      <span
+        class="carousel-control-prev-icon"
+        aria-hidden="true">
+      </span>
       <span class="visually-hidden">Previous</span>
-    </a>
+    </button>
 
-    <a
+    <button
       class="carousel-control-next"
+      type="button"
       [attr.data-bs-target]="carouselIdForBinding"
       data-bs-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
+      <span
+        class="carousel-control-next-icon"
+        aria-hidden="true">
+      </span>
       <span class="visually-hidden">Next</span>
-    </a>
+    </button>
+
   </div>
 }

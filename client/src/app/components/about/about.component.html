@@ -1,20 +1,30 @@
-
 <!-- Load user information -->
-<button class="btn btn-light" (click)="loadInfo()">
+<button class="btn btn-light" (click)="loadAboutMe()">
   Load info about me
 </button>
 
+<!-- Display error message if loading fails -->
+<p *ngIf="errorMessage" role="alert">
+  {{ errorMessage }}
+</p>
+
 <!-- Display username -->
-<h3>Logged in user: {{name}}</h3>
+<h3>Logged in user: {{ name }}</h3>
 
 <!-- Display profile picture -->
-<img [src]="profile_pic" class="profile">
+<img
+  [src]="profile_pic"
+  class="profile"
+  alt="User profile picture">
 
+<!-- Open Spotify profile -->
 <p>
-  <!-- Open Spotify profile -->
-  <a class="btn btn-light"
-     [href]="profile_link"
-     target="_blank">
+  <a
+    *ngIf="profile_link"
+    class="btn btn-light"
+    [href]="profile_link"
+    target="_blank"
+    rel="noopener noreferrer">
     Open profile on Spotify
   </a>
 </p>

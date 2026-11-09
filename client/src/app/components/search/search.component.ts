@@ -1,43 +1,61 @@
 import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from '../../services/spotify.service';
-import { ArtistData } from '../../data/artist-data';
-import { AlbumData } from '../../data/album-data';
 import { TrackData } from '../../data/track-data';
 import { ResourceData } from '../../data/resource-data';
 
 @Component({
-    selector: 'app-search',
-    templateUrl: './search.component.html',
-    styleUrls: ['./search.component.css'],
-    providers: [SpotifyService],
-    standalone: false
+  selector: 'app-search',
+  templateUrl: './search.component.html',
+  styleUrls: ['./search.component.css'],
+  providers: [SpotifyService],
+  standalone: false
 })
 export class SearchComponent implements OnInit {
-  searchString:string;
-  searchCategory:string = 'artist';
-  searchCategories:string[] = ['artist', 'album', 'track'];
-  resources:ResourceData[];
+  searchString: string = '';
+  searchCategory: string = 'artist';
+  searchCategories: string[] = ['artist', 'album', 'track'];
 
-  constructor(private spotifyService:SpotifyService) { }
+  resources: ResourceData[] = [];
+  tracks: TrackData[] = [];
 
-  ngOnInit() {
-  }
+  resultCategory: string = '';
+  loading: boolean = false;
+  errorMessage: string = '';
 
-  
+  constructor(private spotifyService: SpotifyService) { }
 
-search() {
-  if (!this.searchString || !this.searchString.trim()) {
+  ngOnInit() { }
+
+  search(): void {
+    const query = this.searchString.trim();
+
+    if (!query || this.loading) {
+      return;
+    }
+
+    const category = this.searchCategory;
+
+    this.loading = true;
+    this.errorMessage = '';
     this.resources = [];
-    return;
+    this.tracks = [];
+    this.resultCategory = '';
+
+    this.spotifyService.searchFor(category, query)
+      .then((results) => {
+        this.resultCategory = category;
+        this.resources = results;
+
+        this.tracks = category === 'track'
+          ? results as TrackData[]
+          : [];
+
+        this.loading = false;
+      })
+      .catch((error) => {
+        this.errorMessage = 'Unable to search. Please try again.';
+        this.loading = false;
+        console.error('Search failed:', error);
+      });
   }
-
-  this.spotifyService.searchFor(
-    this.searchCategory,
-    this.searchString
-  ).then((data) => {
-    this.resources = data;
-  });
-}
-
-
 }

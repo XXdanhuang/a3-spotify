@@ -1,4 +1,3 @@
-
 import { Component, OnInit } from '@angular/core';
 import { SpotifyService } from '../../services/spotify.service';
 
@@ -9,21 +8,28 @@ import { SpotifyService } from '../../services/spotify.service';
   standalone: false
 })
 export class AboutComponent implements OnInit {
-  name: string = null;
-  profile_pic: string = "assets/unknown.jpg";
-  profile_link: string = null;
+  name: string = '';
+  profile_pic: string = 'assets/unknown.jpg';
+  profile_link: string = '';
+  errorMessage: string = '';
 
   constructor(private spotifyService: SpotifyService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
-  // Load user information from Spotify
-  loadInfo() {
-    this.spotifyService.aboutMe().then((data) => {
-      this.name = data.name;
-      this.profile_pic = data.imageURL;
-      this.profile_link = data.spotifyProfile;
-    });
+  // Load the user's profile when the button is clicked.
+  loadAboutMe(): void {
+    this.errorMessage = '';
+
+    this.spotifyService.aboutMe()
+      .then((profile) => {
+        this.name = profile.name;
+        this.profile_pic = profile.imageURL;
+        this.profile_link = profile.spotifyProfile;
+      })
+      .catch((error) => {
+        this.errorMessage = 'Unable to load profile. Please try again.';
+        console.error('Failed to load profile:', error);
+      });
   }
 }

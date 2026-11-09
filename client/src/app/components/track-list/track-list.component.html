@@ -1,4 +1,3 @@
-
 @if (tracks) {
   <table class="table table-sm table-light table-striped">
     <thead>
@@ -18,7 +17,7 @@
     </thead>
 
     <tbody>
-      @for (track of tracks; track $index; let i = $index) {
+      @for (track of tracks; track track.id; let i = $index) {
         <tr>
           <td>{{ i + 1 }}</td>
 
@@ -32,7 +31,7 @@
 
           @if (!hideArtist) {
             <td>
-              @if (track.artists.length > 0) {
+              @if (track.artists && track.artists.length > 0) {
                 <a [routerLink]="['/artist', track.artists[0].id]">
                   {{ track.artists[0].name }}
                 </a>
