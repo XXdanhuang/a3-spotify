@@ -15,18 +15,9 @@ export class SpotifyService {
 
   constructor(private http:HttpClient) { }
 
-  private sendRequestToExpress(endpoint:string):Promise<any> {
-    //TODO: use the injected http Service to make a get request to the Express endpoint and return the response.
-    //Specifically, update the URI according to the base URL for express and the endpoint.
-    var uri:string = "";
-
-    //firstValueFrom generates a Promise for whatever is returned first from the GET request.
-    //You shouldn't need to update this part.
-    return firstValueFrom(this.http.get(uri)).then((response) => {
-      return response;
-    }, (err) => {
-      return err;
-    });
+  private sendRequestToExpress(endpoint: string): Promise<any> {
+  const uri = this.expressBaseUrl + endpoint;
+  return firstValueFrom(this.http.get(uri));
   }
 
   aboutMe():Promise<ProfileData> {
@@ -41,7 +32,19 @@ export class SpotifyService {
     //Make sure you're encoding the resource with encodeURIComponent().
     //Depending on the category (artist, track, album), return an array of that type of data.
     //JavaScript's "map" function might be useful for this, but there are other ways of building the array.
-    return null as any;
+    const endpoint = `/search/${category}/${encodeURIComponent(resource)}`;
+    return this.sendRequestToExpress(endpoint).then((data) => {
+      switch (category) {
+        case 'artist':
+          return data.artists.items.map((item: any) => new ArtistData(item));
+        case 'album':
+          return data.albums.items.map((item: any) => new AlbumData(item));
+        case 'track':
+          return data.tracks.items.map((item: any) => new TrackData(item));
+        default:
+          return [];
+      }
+    })
   }
 
   getArtist(artistId:string):Promise<ArtistData> {
