@@ -1,30 +1,63 @@
+
 <div class="row">
-	@if(track) {
-		<div class="col-sm-6 col-12">
-			<!--TODO: populate with track name-->
-			<h1>???</h1>
-			<p>
-				<!--TODO: link to album page, display album name-->
-				Track on <a>???</a>
-			</p>
-			<div>
-				<!--TODO: loop over track's artists-->
-				<p>
-					<!--TODO: link to artist page, display artist name-->
-					Artist: <a>???</a>
-				</p>
-			</div>
-			<p>
-				<!--TODO: populate with track duration-->
-				Duration: ???
-			</p>
-			<p>
-				<!--TODO: link to track page on spotify, display track name-->
-				<a class="btn btn-light" role="button" target="_blank">Open ??? on Spotify</a>
-			</p>
-		</div>
-		<div class="col-sm-6 col-12">
-			<!--TODO: create a thermometer component with the track's popularity-->
-		</div>
-	}
+  @if (track) {
+
+    <!-- Track information -->
+    <div class="col-sm-6 col-12">
+      <h1>{{ track.name }}</h1>
+
+      <!-- Album link -->
+      <p>
+        Track on
+        <a [routerLink]="['/album', track.album.id]">
+          {{ track.album.name }}
+        </a>
+      </p>
+
+      <!-- Artists -->
+      <div>
+        @for (artist of track.artists; track artist.id) {
+          <p>
+            Artist:
+            <a [routerLink]="['/artist', artist.id]">
+              {{ artist.name }}
+            </a>
+          </p>
+        }
+      </div>
+
+      <!-- Duration -->
+      <p>
+        Duration: {{ track.durationStr }}
+      </p>
+
+      <!-- Spotify track link -->
+      <p>
+        <a
+          class="btn btn-light"
+          role="button"
+          [href]="track.url"
+          target="_blank"
+          rel="noopener noreferrer">
+          Open {{ track.name }} on Spotify
+        </a>
+      </p>
+    </div>
+
+    <!-- Popularity -->
+    <div class="col-sm-6 col-12">
+      <h3>Popularity</h3>
+
+      <app-thermometer
+        [popularity]="track.popularity">
+      </app-thermometer>
+    </div>
+
+  }
 </div>
+
+@if (errorMessage) {
+  <p role="alert">
+    {{ errorMessage }}
+  </p>
+}
